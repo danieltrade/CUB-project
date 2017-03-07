@@ -1,0 +1,185 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.cub.hdcos</groupId>
+  <artifactId>hdcos</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>hdcos</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <base.path>D:/daniel/cub-bitbucket/cub_dataetl-hadoopetl/hdcos</base.path>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <!--
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-client</artifactId>
+      <version>2.6.0-cdh5.8.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-common</artifactId>
+      <version>2.6.0-cdh5.8.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-hdfs</artifactId>
+      <version>2.6.0-cdh5.8.0</version>
+    </dependency>
+    -->
+    <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-core_2.10 -->
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-core_2.10</artifactId>
+      <version>1.6.0-cdh5.8.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.hive/hive-exec -->
+    <dependency>
+      <groupId>org.apache.hive</groupId>
+      <artifactId>hive-exec</artifactId>
+      <version>1.1.0-cdh5.8.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.hive/hive-jdbc -->
+    <dependency>
+       <groupId>org.apache.hive</groupId>
+       <artifactId>hive-jdbc</artifactId>
+       <version>1.1.0-cdh5.8.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>9.2-1004-jdbc41</version>
+    </dependency>
+<!--     <dependency> -->
+<!--         <groupId>cub</groupId> -->
+<!--         <artifactId>cub-encrypt</artifactId> -->
+<!--         <version>1.0.1</version> -->
+<!--     </dependency> -->
+    <dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+		<version>1.2.17</version>
+	</dependency>
+    <dependency>
+     <groupId>cub</groupId>
+     <artifactId>cub-encrypt</artifactId>
+     <scope>system</scope>
+     <version>1.0.1</version>
+     <systemPath>${base.path}/lib/cub/cub-encrypt/1.0.1/cubEncrypt-1.0.1.jar</systemPath>
+   </dependency>
+   <dependency>
+     <groupId>teradata</groupId>
+     <artifactId>tdgssconfig</artifactId>
+     <scope>system</scope>
+     <version>1.0.1</version>
+     <systemPath>${base.path}/lib/teradata/tdgssconfig/1.0.1/tdgssconfig.jar</systemPath>
+   </dependency>
+   <dependency>
+     <groupId>teradata</groupId>
+     <artifactId>teradata-jdbc</artifactId>
+     <scope>system</scope>
+     <version>1.0.1</version>
+     <systemPath>${base.path}/lib/teradata/teradata-jdbc/1.0.1/terajdbc4.jar</systemPath>
+   </dependency>
+  </dependencies>
+
+  <repositories>
+        <repository>
+            <id>cloudera</id>
+            <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+        </repository>
+        <repository>
+	       <id>my-local-repo</id>
+	       <url>${base.path}/lib</url>
+	    </repository>
+    </repositories>
+
+
+<build>
+		<finalName>hdcos</finalName>
+		<!-- 要把properties包進jar檔時 -->
+		<!--  -->
+		<resources>
+			<resource>
+				<directory>${base.path}/src/main/resource</directory>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+		</resources>
+		
+		<plugins>
+			<!-- download source code in Eclipse, best practice -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>false</downloadJavadocs>
+				</configuration>
+			</plugin>
+
+			<!-- Set a compiler level -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+
+		<!-- Maven Shade Plugin -->
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-shade-plugin</artifactId>
+			<version>2.3</version>
+			<executions>
+				<!-- Run shade goal on package phase -->
+				<execution>
+				<phase>package</phase>
+				<goals>
+					<goal>shade</goal>
+				</goals>
+				<configuration>
+					<!-- 
+						http://www.cnblogs.com/fuxinci/p/3356087.html
+					 -->
+					<filters>
+						<filter>
+							<artifact>*:*</artifact>
+							<excludes>
+								<exclude>META-INF/*.SF</exclude>
+								<exclude>META-INF/*.DSA</exclude>
+								<exclude>META-INF/*.RSA</exclude>
+							</excludes>
+						</filter>
+					</filters>
+					 <!--  <transformers>
+						add Main-Class to manifest file
+						<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+							<mainClass>com.cub.hdcos.shell.execute.HiveMetaShell</mainClass>
+						</transformer>
+					  </transformers> -->
+				</configuration>
+				</execution>
+			</executions>
+		</plugin>
+		</plugins>
+	</build>
+</project>

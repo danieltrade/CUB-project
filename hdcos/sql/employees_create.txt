@@ -1,0 +1,28 @@
+create table emplyees (
+ name string ,
+ salary float ,
+ subordinates array<string> ,
+ deductions map<string,float> ,
+ address struct<street:string, city:string, state:string, zip:int>
+) 
+row format delimited
+fields terminated by '\001'
+collection items terminated by '\002'
+map keys terminated by '\003'
+lines terminated by '\n'
+stored as textfile
+
+
+create table emplyees (
+ name string ,
+ salary float ,
+ subordinates array<string> ,
+ deductions map<string,float> ,
+ address struct<street:string, city:string, state:string, zip:int>
+) 
+row format delimited
+fields terminated by '\001'
+collection items terminated by '\002'
+map keys terminated by '\003'
+lines terminated by '\n'
+stored as textfile

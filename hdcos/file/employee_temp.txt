@@ -1,0 +1,4 @@
+John Doe\001100000.0\001Mary Smith_Todd Jones\001MichiganAve
+Mary Smith\00180000.0\001Bill King\001Ontario St.
+Bill Kiing\001600000.0\001Federal Taxes\001Obscure Dr.
+Todd Jones\00170000.0\001Federal Taxes\001200 Chicago Ave.
